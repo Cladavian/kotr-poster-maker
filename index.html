@@ -80,8 +80,11 @@
   #cleaner[hidden]{display:none}
   .stage{position:relative}
   .ctool{display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--line);background:var(--panel)}
-  .ctool .grp{display:flex;gap:6px;align-items:center;padding-right:10px;border-right:1px solid var(--line)}
+  .ctool .grp{display:flex;flex-wrap:wrap;gap:6px;align-items:center;padding-right:10px;border-right:1px solid var(--line)}
+  .ctool{max-width:100%}
+  .ctool button{padding:6px 9px;font-size:11px}
   .ctool .grp:last-child{border-right:0}
+  .ctool .sep{width:1px;height:22px;background:var(--line);margin:0 4px}
   .ctool button.on{border-color:var(--gold);color:var(--gold2);background:#1f1c15}
   .ctool input[type=range]{width:90px}
   .cstage{display:flex;align-items:center;justify-content:center;overflow:hidden;padding:16px}
@@ -120,7 +123,7 @@
       <div id="lib" class="lib"></div>
       <div id="lib_empty" class="empty">No posters yet.<br>Add posters or a folder to build your library.</div>
       <div class="btns"><button id="pf_clean" class="primary">✂ Clean this poster (erase original fighters &amp; text)</button></div>
-      <div class="hint">Cleaning runs an AI eraser in your browser: it removes the original fighters and text and rebuilds the background. First use downloads a 93 MB model once.</div>
+      <div class="hint">One click marks the original fighters, text and logos; the AI eraser removes them and rebuilds the background, all in your browser. First use downloads the models once (about 100 MB).</div>
       <label>Blur original poster <input type="range" id="pf_blur" min="0" max="40" step="1" value="0"></label>
       <label>Darken original poster <input type="range" id="pf_darken" min="0" max="0.9" step="0.02" value="0.3"></label>
       <div class="row">
@@ -216,17 +219,26 @@
       <div class="ctool">
         <span id="cl_title"></span>
         <span class="grp" id="cl_tools">
-          <button id="cl_people" title="Find the people on the poster automatically">Auto-detect fighters</button>
-          <button id="cl_text" title="Find text automatically (works on plain fonts)">Detect text</button>
-          <button id="cl_brush" class="on">Brush</button>
+          <button id="cl_auto" class="primary" title="Fighters + text + text logos in one go">Auto-mark everything</button>
+          <button id="cl_people" title="Only the people">Fighters</button>
+          <button id="cl_text" title="Only text and text logos">Text</button>
+          <span class="sep"></span>
+          <button id="cl_wand" title="Click a letter or logo: everything in that colour gets marked">Wand</button>
           <button id="cl_rect">Rectangle</button>
+          <button id="cl_brush" class="on">Brush</button>
           <button id="cl_erase">Un-mark</button>
-          <label style="display:flex;align-items:center;gap:6px">Size <input type="range" id="cl_size" min="8" max="160" value="40"></label>
+          <label style="display:flex;align-items:center;gap:6px"><span id="cl_sizelbl">Size</span> <input type="range" id="cl_size" min="8" max="160" value="40"></label>
+          <span class="sep"></span>
+          <button id="cl_ztop" title="Mark the top band (event title / logo)">Top</button>
+          <button id="cl_zbottom" title="Mark the bottom band (names / date / sponsors)">Bottom</button>
+          <button id="cl_zsides" title="Mark the side strips (vertical names)">Sides</button>
+          <span class="sep"></span>
           <button id="cl_undo" disabled>Undo</button>
           <button id="cl_clear">Clear</button>
         </span>
         <span class="grp">
           <button id="cl_run" class="primary">Erase &amp; rebuild</button>
+          <label class="check" style="font-size:11px" title="Second, tiled pass over large erased areas. Better texture, takes longer."><input type="checkbox" id="cl_hq" checked> High quality</label>
           <button id="cl_keep" class="primary" hidden>Keep result</button>
           <button id="cl_refine" hidden>Refine further</button>
           <button id="cl_back" hidden>Back to mask</button>

@@ -16,11 +16,14 @@ Workflow
 
 2. CLEAN THE POSTER  (once per poster)
    Press "Clean this poster". In the cleaner:
-   - "Auto-detect fighters" marks the people on the poster.
-   - "Detect text" marks plain text. Stylised titles are often missed: drag the
-     Rectangle tool over them instead. Brush / Un-mark for fine control, Undo if needed.
-   - "Erase & rebuild" runs the AI. First use downloads a 93 MB model once, then
-     about 10-40 s per poster on CPU, a few seconds with a supported GPU.
+   - "Auto-mark everything" marks the original fighters, all text and text logos
+     (any font, any direction) in one go. Takes about a minute the first time.
+   - Anything left over: "Wand" and click a letter or logo = everything in that
+     colour gets marked (perfect for the giant side names). "Rectangle", "Brush",
+     "Un-mark", and the Top / Bottom / Sides buttons for the usual text bands.
+   - "Erase & rebuild" runs the AI eraser. First use downloads the model once (93 MB),
+     then roughly 1-3 minutes per poster on CPU with "High quality" on, a few seconds
+     with a supported GPU. The page is busy while it runs; that is normal.
    - Check the result. "Refine further" lets you mark leftovers and run again.
      "Keep result" saves the cleaned poster in your library (marked CLEANED).
    Tip: erase a little more than you think. A margin around fighters and text
