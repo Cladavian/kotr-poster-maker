@@ -112,7 +112,7 @@ async function detectPeople(src,W,H,prog){
 async function detectText(img,prog){
   prog('Loading text detector…');
   if(!window.Tesseract) await loadScript('https://cdn.jsdelivr.net/npm/tesseract.js@7.0.0/dist/tesseract.min.js');
-  const worker=await Tesseract.createWorker('eng',1,{ workerPath:'https://cdn.jsdelivr.net/npm/tesseract.js@7.0.0/dist/worker.min.js', corePath:'https://cdn.jsdelivr.net/npm/tesseract.js-core@6.1.2', logger:m=>{ if(m.status) prog(`Detecting text… ${m.status} ${Math.round((m.progress||0)*100)}%`); } });
+  const worker=await Tesseract.createWorker('eng',1,{ logger:m=>{ if(m.status) prog(`Detecting text… ${m.status} ${Math.round((m.progress||0)*100)}%`); } });
   const s=Math.min(1,1600/Math.max(img.width,img.height)); const c=mk(img.width*s,img.height*s); c.getContext('2d').drawImage(img,0,0,c.width,c.height);
   let words=[];
   try{
