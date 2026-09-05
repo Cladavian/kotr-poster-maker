@@ -381,7 +381,7 @@ async function render(target=canvas, scale=1){
   const {W,H}=L; const ps=px*scale;
   target.width=Math.round(W*ps); target.height=Math.round(H*ps);
   const ctx=target.getContext('2d'); ctx.setTransform(ps,0,0,ps,0,0); ctx.imageSmoothingQuality='high';
-  await document.fonts.ready;
+  try{ await Promise.all(['40px "Anton"','40px "Bebas Neue"','600 40px "Oswald"','400 40px "Oswald"'].map(f=>document.fonts.load(f))); }catch(e){}
   const [logo,bg,f0,f1,...sps]=await Promise.all([loadImg(S.logo),loadImg(S.bg),loadImg(S.fighters[0].img),loadImg(S.fighters[1].img),...S.sponsors.map(loadImg)]);
   const pal=cur&&cur.pal; const A=(posterImg&&P.match&&pal&&pal.accent)?pal.accent:S.accent;
   const dark=(pal&&pal.dark)||'#0a0a0b';

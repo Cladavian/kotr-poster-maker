@@ -150,7 +150,7 @@ function setBusy(b){ busy=b; UI.root.classList.toggle('busy',b); }
 async function guarded(fn){ if(busy) return; setBusy(true); try{ await fn(); }catch(e){ console.error(e); status('Failed: '+e.message); } finally{ setBusy(false); } }
 
 async function open(){
-  cur=window.currentPoster&&currentPoster(); if(!cur){ setStatus('Pick a poster first'); return; }
+  cur=typeof currentPoster==='function'?currentPoster():null; if(!cur){ setStatus('Pick a poster first'); return; }
   const src=cur.clean||cur.src; baseImg=await loadImg(src); if(!baseImg) return;
   base=mk(baseImg.width,baseImg.height); base.getContext('2d').drawImage(baseImg,0,0);
   mask=mk(baseImg.width,baseImg.height); mask.getContext('2d').fillStyle='#000'; mask.getContext('2d').fillRect(0,0,mask.width,mask.height);
@@ -163,7 +163,9 @@ async function runClean(){ await guarded(async()=>{ const out=await cleanPoster(
 async function keep(){ if(!result) return; await guarded(async()=>{
   status('Saving…'); cur.clean=result.toDataURL('image/jpeg',0.92); cur.maskData=null; cur.thumb=shrinkCanvas(result,240);
   if(typeof dbPut==='function') await dbPut(cur);
-  if(window.S){ S.pfx.coverTop=0; S.pfx.coverBottom=0; S.pfx.darken=Math.min(S.pfx.darken,0.12); S.pfx.blur=0; if(typeof rebuildUI==='function') rebuildUI(); else queue(); }
+  if(typeof S!=='undefined'&&S.pfx){ S.pfx.coverTop=0; S.pfx.coverBottom=0; S.pfx.darken=Math.min(S.pfx.darken,0.12); S.pfx.blur=0; }
+  if(typeof RANK!=='undefined') RANK=null;
+  if(typeof rebuildUI==='function') rebuildUI(); else if(typeof queue==='function') queue();
   close(); setStatus('Cleaned poster saved — now place the KOTR fighters'); }); }
 function shrinkCanvas(c,max){ const r=Math.min(1,max/Math.max(c.width,c.height)); const t=mk(c.width*r,c.height*r); t.getContext('2d').drawImage(c,0,0,t.width,t.height); return t.toDataURL('image/jpeg',0.85); }
 async function resetOriginal(){ if(!cur||!cur.clean) return; if(!confirm('Discard the cleaned version and go back to the original poster?')) return; cur.clean=null; cur.maskData=null; const im=await loadImg(cur.src); cur.thumb=im?shrinkCanvas((()=>{const c=mk(im.width,im.height);c.getContext('2d').drawImage(im,0,0);return c;})(),240):cur.thumb; if(typeof dbPut==='function') await dbPut(cur); close(); if(typeof rebuildUI==='function') rebuildUI(); }
